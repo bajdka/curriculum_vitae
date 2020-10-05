@@ -1,4 +1,7 @@
-name: Create PDFs from HTML files
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
 
 on:
   push:
@@ -11,21 +14,24 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 12.x
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: ${{ matrix.node-version }}
     - run: sh to_pdf.sh
       
     - uses: actions/upload-artifact@v2
-    - name: Uplaod artifacts
       with:
         name: cv-pdfs
         path: out/
 
-    - uses: c-hive/gha-remove-artifacts@v1
     - name: Remove old artifacts
+      uses: c-hive/gha-remove-artifacts@v1
       with:
-        skip-recent: 5
+        skip-recent: 1
