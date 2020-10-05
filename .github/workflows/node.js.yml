@@ -25,3 +25,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: sh to_pdf.sh
+      
+    - uses: actions/upload-artifact@v2
+      with:
+        name: cv-pdfs
+        path: out/
